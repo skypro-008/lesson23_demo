@@ -11,19 +11,20 @@ def division(a, b):
     try:
         a = int(a)
         b = int(b)
-    except ValueError:
+    except (ValueError, TypeError):
         raise ApiError('a or b is not int')
     try:
-        return a/b
+        return a / b
     except ZeroDivisionError:
         raise ApiError('b is zero')
 
 
 @app.route("/")
 def hello_world():
+    a = request.args.get('a')
+    b = request.args.get('b')
+
     try:
-        a = request.args.get('a')
-        b = request.args.get('b')
         res = division(a, b)
         return jsonify({'result': res})
     except ApiError as e:
